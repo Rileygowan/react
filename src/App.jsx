@@ -8,7 +8,10 @@ class App extends Component {
     //Alternate way of binding
     // this._sendMessage = this._sendMessage.bind(this)
     this.state = {
-      currentUser: {name: "Anonymous"},
+      currentUser:  {
+                    name: "Anonymous",
+                    color: null
+                    },
       messages: []
     };
   }
@@ -34,6 +37,7 @@ class App extends Component {
               break;
             case "users":
               let users = newData.data
+              this.state.currentUser.color = newData.color;
               this.setState({users})
               break;
             default:
@@ -74,8 +78,8 @@ class App extends Component {
             </div>
           </a>
         </nav>
-        <MessageList currentUser={this.state.currentUser.name} messages={this.state.messages}/>
-        <ChatBar currentUser={this.state.currentUser.name} messageCreated={this._sendMessage}/>
+        <MessageList messages={this.state.messages}/>
+        <ChatBar currentUser={this.state.currentUser} messageCreated={this._sendMessage}/>
       </div>
     );
   }
