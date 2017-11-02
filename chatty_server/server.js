@@ -32,14 +32,32 @@ wss.on('connection', (ws) => {
   console.log('Client connected');
   //RECEIVE MESSAGE FROM CLIENT
   ws.on('message', (message) => {
-    const newMessage = JSON.parse(message)
-    console.log(`User ${newMessage.username} said ${newMessage.content}`);
-    //RECOMPILE MESSAGE WITH ID
-    newMessage.id = uuid();
-    //REPLY TO CLIENTS
-    wss.broadcast(JSON.stringify(newMessage))
+    const receipt = JSON.parse(message)
+    switch(receipt.type) {
+      case "postMessage":
+        receipt.id = uuid();
+        receipt.type = "incomingMessage"
+        wss.broadcast(JSON.stringify(receipt));
+        break;
+      case "postNotification":
+        receipt.id = uuid();
+        receipt.type = "incomingNotification";
+        wss.broadcast(JSON.stringify(receipt));
+        break;
+      default:
+        console.log('Error time')
+        throw new Error("Unknown event type " + data.type);
+      }
     })
-  ws.on('close', () => console.log('Client disconnected'));
+
+  //   console.log(newMessage)
+  //   // console.log(`User ${newMessage.username} said ${newMessage.content}`);
+  //   //RECOMPILE MESSAGE WITH ID
+  //   newMessage.id = uuid();
+  //   //REPLY TO CLIENTS
+  //   wss.broadcast(JSON.stringify(newMessage))
+  //   })
+  // ws.on('close', () => console.log('Client disconnected'));
 });
 
 
