@@ -30,6 +30,14 @@ wss.broadcast = function broadcast(data) {
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
   console.log('Client connected');
+
+  let users = {
+    type: 'users',
+    data: `${wss.clients.size} user(s) online`
+  }
+
+  wss.broadcast(JSON.stringify(users))
+
   //RECEIVE MESSAGE FROM CLIENT
   ws.on('message', (message) => {
     const receipt = JSON.parse(message)
@@ -56,9 +64,17 @@ wss.on('connection', (ws) => {
   //   newMessage.id = uuid();
   //   //REPLY TO CLIENTS
   //   wss.broadcast(JSON.stringify(newMessage))
-  //   })
-  // ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close', function close(error) {
+    let usersRemaining = {
+      type: 'users',
+      data: `${wss.clients.size} user(s) online`
+    }
+    wss.broadcast(JSON.stringify(usersRemaining))
+    console.log(error)
+    console.log('Client disconnected');
+  });
 });
+
 
 
 // const WebSocket = require('ws');

@@ -9,9 +9,7 @@ class App extends Component {
     // this._sendMessage = this._sendMessage.bind(this)
     this.state = {
       currentUser: {name: "Anonymous"},
-      previousUser: {name: "Anonymous"},
-      messages: [],
-      notifications: []
+      messages: []
     };
   }
 
@@ -22,18 +20,21 @@ class App extends Component {
     chattySocket.onopen = (event) => {
       console.log("Connected to server.")
 
-
       // RECEIVE MESSAGE FROM SERVER
       chattySocket.onmessage = (event) => {
         const newData = JSON.parse(event.data);
           switch(newData.type) {
             case "incomingMessage":
-              const messages = this.state.messages.concat(newData)
+              let messages = this.state.messages.concat(newData)
               this.setState({messages})
               break;
             case "incomingNotification":
-              const notifications = this.state.notifications.concat(newData)
-              this.setState({notifications})
+              messages = this.state.messages.concat(newData)
+              this.setState({messages})
+              break;
+            case "users":
+              let users = newData.data
+              this.setState({users})
               break;
             default:
               console.log('This is not supposed to happen')
@@ -66,9 +67,14 @@ class App extends Component {
     return (
       <div>
         <nav className="navbar">
-          <a href="/" className="navbar-brand">Chatty</a>
+          <a href="/" className="navbar-brand">
+            Chatty
+            <div className="current-users">
+              {this.state.users}
+            </div>
+          </a>
         </nav>
-        <MessageList notifications={this.state.notifications} previousUser={this.state.previousUser.name} currentUser={this.state.currentUser.name} messages={this.state.messages}/>
+        <MessageList currentUser={this.state.currentUser.name} messages={this.state.messages}/>
         <ChatBar currentUser={this.state.currentUser.name} messageCreated={this._sendMessage}/>
       </div>
     );
