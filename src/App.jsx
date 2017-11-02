@@ -35,9 +35,11 @@ class App extends Component {
               messages = this.state.messages.concat(newData)
               this.setState({messages})
               break;
+            case "color":
+              this.state.currentUser.color = newData.color;
+              break;
             case "users":
               let users = newData.data
-              this.state.currentUser.color = newData.color;
               this.setState({users})
               break;
             default:

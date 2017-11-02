@@ -37,14 +37,19 @@ var colors = {
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
   console.log('Client connected');
-  console.log(Math.floor(Math.random() * 4) + 1)
+
+  let color = {
+    type: 'color',
+    color: colors[Math.floor(Math.random()*4)+1]
+  }
+
   let users = {
-    color: colors[Math.floor(Math.random()*4)+1],
     type: 'users',
     data: `${wss.clients.size} user(s) online`
   }
 
   wss.broadcast(JSON.stringify(users))
+  ws.send(JSON.stringify(color))
 
   //RECEIVE MESSAGE FROM CLIENT
   ws.on('message', (message) => {
