@@ -11,21 +11,15 @@ class ChatBar extends Component {
   }
 
   //UPDATES THIS.STATE ONKEYPRESS
-  //TRIGGERS MESSAGECREATED AFTER TIMEOUT
   _createMessage = (event) => {
     if (event.key === 'Enter') {
       let message = {
         type:     "postMessage",
-        content:   event.target.value,
-        username:  this.props.currentUser.name,
+        content:  event.target.value,
+        username: this.props.currentUser.name,
         color:    this.props.currentUser.color
       };
-      console.log(message)
-      // this.setState({content: event.target.value})
-      // if (!this.state.username) {
-      //   this.setState({username: this.props.currentUser})
-      // }
-      this.props.messageCreated(message)
+    this.props.messageCreated(message)
     }
   }
 

@@ -8,11 +8,11 @@ class Message extends Component {
       <div className="message system">{content}</div>
       );
     } else {
-      return (
-          <div className="message">
-            <span style={{color}} className="message-username">{username}</span>
-            <span className="message-content">{content}</span>
-          </div>
+    return (
+        <div className="message">
+          <span style={{color}} className="message-username">{username}</span>
+          <span className="message-content">{content}</span>
+        </div>
       );
     }
   }
